@@ -10,6 +10,9 @@ class WaitingTimelineService
     /** @var WaitingTimeline[] */
     protected array $entities = [];
 
+    /** @var WaitingTimeline[] */
+    protected array $matchingEntities = [];
+
     public function addEntity(WaitingTimeline $waitingTimeline): static
     {
         $this->entities[] = $waitingTimeline;
@@ -20,24 +23,36 @@ class WaitingTimelineService
     public function resetEntities(): static
     {
         $this->entities = [];
+        $this->matchingEntities = [];
 
         return $this;
     }
 
-    /** @return WaitingTimeline[] */
-    public function findEntitiesByQuery(Query $query): array
+    public function setMatchingEntitiesByQuery(Query $query): static
     {
-        $result = [];
+        $this->matchingEntities = [];
 
         foreach ($this->entities as $waitingTimeline) {
             $matchingWaitingTimeline = $this->checkForMatch($waitingTimeline, $query);
 
             if ($matchingWaitingTimeline !== null) {
-                $result[] = $matchingWaitingTimeline;
+                $this->matchingEntities[] = $matchingWaitingTimeline;
             }
         }
 
-        return $result;
+        return $this;
+    }
+
+    public function getMatchingEntities(): array
+    {
+        return $this->matchingEntities;
+    }
+
+    public function getAverageWaitingTime(): ?int
+    {
+        if (empty($this->matchingEntities)) {
+            return null;
+        }
     }
 
     private function checkForMatch(WaitingTimeline $wt, Query $query): ?WaitingTimeline

@@ -26,13 +26,15 @@ class WaitingTimelineServiceTest extends TestCase
         $waitingTimelineService = new WaitingTimelineService();
         $waitingTimeline = new WaitingTimeline(1, 2, 3, 3, 4, ResponseType::N, new DateTime('2023-01-01'), 10);
         $waitingTimelineService->addEntity($waitingTimeline);
+        $waitingTimelineService->setMatchingEntitiesByQuery(
+            new Query(null, null, null, null, null, ResponseType::N, new DateTime())
+        );
+
 
         $result = $waitingTimelineService->resetEntities();
 
         $this->assertInstanceOf(WaitingTimelineService::class, $result);
-        $this->assertEmpty($waitingTimelineService->findEntitiesByQuery(
-            new Query(null, null, null, null, null, ResponseType::N, new DateTime()),
-        ));
+        $this->assertEmpty($waitingTimelineService->getMatchingEntities());
     }
 
     public function testFindEntitiesByQuery()
@@ -46,7 +48,7 @@ class WaitingTimelineServiceTest extends TestCase
 
         $query = new Query(1, 2, 3, 3, null, ResponseType::P, new DateTime('2023-01-01'));
 
-        $result = $waitingTimelineService->findEntitiesByQuery($query);
+        $result = $waitingTimelineService->setMatchingEntitiesByQuery($query)->getMatchingEntities();
 
         $this->assertCount(1, $result);
         $this->assertInstanceOf(WaitingTimeline::class, $result[0]);
@@ -69,7 +71,7 @@ class WaitingTimelineServiceTest extends TestCase
 
         $query = new Query(null, null, null, null, null, ResponseType::N, new DateTime('2023-01-01'));
 
-        $result = $waitingTimelineService->findEntitiesByQuery($query);
+        $result = $waitingTimelineService->setMatchingEntitiesByQuery($query)->getMatchingEntities();
 
         $this->assertCount(4, $result);
         $this->assertInstanceOf(WaitingTimeline::class, $result[0]);
@@ -95,7 +97,7 @@ class WaitingTimelineServiceTest extends TestCase
 
         $query = new Query(1, 1, 1, 1, 1, ResponseType::N, new DateTime('2023-06-01'), new DateTime('2023-10-01'));
 
-        $result = $waitingTimelineService->findEntitiesByQuery($query);
+        $result = $waitingTimelineService->setMatchingEntitiesByQuery($query)->getMatchingEntities();
 
         $this->assertCount(1, $result);
         $this->assertInstanceOf(WaitingTimeline::class, $result[0]);
