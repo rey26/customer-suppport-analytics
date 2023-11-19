@@ -5,7 +5,7 @@ The result is average waiting time of given sequence of records filtered by quer
 
 ## Architecture
 
-The app is written in plain PHP and is meant to be implemented further with a command reading provided input. The functionality demonstration is done by in provided tests. The main logic is handled in App\Service\MainService
+The app is written in plain PHP and is meant to be implemented further with a command reading provided input. The functionality demonstration is done by in provided tests. The main logic is handled in App\Service\MainService. You can work with input file defined in `/var/input.txt` and write the output to `/var/output.txt` . This can be done by running the main command (AnalyzeCommand) in a project root: `php main.php`.
 
 ## Installation
 
@@ -14,3 +14,4 @@ The app is written in plain PHP and is meant to be implemented further with a co
 ## Usage
 
 1. run unit tests `php vendor/bin/phpunit tests/`
+1. run main command: `php main.php`
