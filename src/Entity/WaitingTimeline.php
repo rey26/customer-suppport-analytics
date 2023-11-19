@@ -9,10 +9,10 @@ class WaitingTimeline
 {
     public function __construct(
         private int $serviceId,
-        private int $variationId,
+        private ?int $variationId,
         private int $questionTypeId,
-        private int $categoryId,
-        private int $subCategoryId,
+        private ?int $categoryId,
+        private ?int $subCategoryId,
         private ResponseType $responseType,
         private DateTimeInterface $responseDate,
         private int $waitingTimeMinutes,
@@ -24,7 +24,7 @@ class WaitingTimeline
         return $this->serviceId;
     }
 
-    public function getVariationId(): int
+    public function getVariationId(): ?int
     {
         return $this->variationId;
     }
@@ -34,12 +34,12 @@ class WaitingTimeline
         return $this->questionTypeId;
     }
 
-    public function getCategoryId(): int
+    public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
-    public function getSubCategoryId(): int
+    public function getSubCategoryId(): ?int
     {
         return $this->subCategoryId;
     }

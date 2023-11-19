@@ -53,6 +53,15 @@ class WaitingTimelineService
         if (empty($this->matchingEntities)) {
             return null;
         }
+        $count = 0;
+        $totalWaitingTime = 0;
+
+        foreach ($this->matchingEntities as $matchingEntity) {
+            $totalWaitingTime += $matchingEntity->getWaitingTimeMinutes();
+            $count++;
+        }
+
+        return round($totalWaitingTime / $count);
     }
 
     private function checkForMatch(WaitingTimeline $wt, Query $query): ?WaitingTimeline

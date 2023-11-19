@@ -21,12 +21,12 @@ class MainService
     {
         $parsedInput = array_filter(explode(PHP_EOL, $input));
 
-        if (empty($parsedInput) || (count($parsedInput) - 1) !== (int) $parsedInput[0]) {
+        if (empty($parsedInput) || (count($parsedInput) - 1) !== (int) $parsedInput[0] || $parsedInput[0] > 100000) {
             throw new InvalidArgumentException('Input is invalid!');
         }
         array_shift($parsedInput);
 
-        $this->parsedInput = $parsedInput;
+        $this->parsedInput = array_map('trim', $parsedInput);
         $this->output = [];
 
         return $this;
@@ -47,10 +47,10 @@ class MainService
 
             if ($queryLineType === 'C') {
                 $this->waitingTimelineService->addEntity(
-                    WaitingTimelineFactory::createFromInputLine(substr(trim($input), 1))
+                    WaitingTimelineFactory::createFromInputLine(trim(substr($input, 1)))
                 );
             } elseif ($queryLineType === 'D') {
-                $query = QueryFactory::createFromInputLine(substr(trim($input), 1));
+                $query = QueryFactory::createFromInputLine(trim(substr($input, 1)));
 
                 $averageWaitingTime = $this->waitingTimelineService
                     ->setMatchingEntitiesByQuery($query)
