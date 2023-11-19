@@ -5,6 +5,7 @@ namespace App\Service\Factory;
 use App\Entity\WaitingTimeline;
 use App\Enum\ResponseType;
 use App\Exception\WaitingTimelineException;
+use App\Service\Validator\InputValidator;
 use DateTime;
 
 class WaitingTimelineFactory
@@ -18,6 +19,7 @@ class WaitingTimelineFactory
         }
 
         $serviceInfo = explode('.', $data[0]);
+        InputValidator::validateService($serviceInfo);
         $serviceId = (int) $serviceInfo[0];
         $variationId = isset($serviceInfo[1]) ? (int) $serviceInfo[1] : null;
 
