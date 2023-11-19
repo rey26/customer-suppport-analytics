@@ -10,7 +10,7 @@ class WaitingTimeline
     public function __construct(
         private int $serviceId,
         private int $variationId,
-        private string $questionTypeId,
+        private int $questionTypeId,
         private int $categoryId,
         private int $subCategoryId,
         private ResponseType $responseType,
@@ -29,7 +29,7 @@ class WaitingTimeline
         return $this->variationId;
     }
 
-    public function getQuestionTypeId(): string
+    public function getQuestionTypeId(): int
     {
         return $this->questionTypeId;
     }

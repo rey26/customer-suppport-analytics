@@ -20,7 +20,7 @@ class WaitingTimelineFactoryTest extends TestCase
 
         $this->assertEquals(9, $waitingTimeline->getServiceId());
         $this->assertEquals(1, $waitingTimeline->getVariationId());
-        $this->assertEquals('7', $waitingTimeline->getQuestionTypeId());
+        $this->assertEquals(7, $waitingTimeline->getQuestionTypeId());
         $this->assertEquals(14, $waitingTimeline->getCategoryId());
         $this->assertEquals(4, $waitingTimeline->getSubCategoryId());
         $this->assertEquals(ResponseType::P, $waitingTimeline->getResponseType());
