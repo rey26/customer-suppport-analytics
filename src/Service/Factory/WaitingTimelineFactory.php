@@ -5,6 +5,7 @@ namespace App\Service\Factory;
 use App\Entity\WaitingTimeline;
 use App\Enum\ResponseType;
 use App\Exception\WaitingTimelineException;
+use DateTime;
 
 class WaitingTimelineFactory
 {
@@ -27,9 +28,17 @@ class WaitingTimelineFactory
 
         $responseType = ResponseType::from($data[2]);
 
-        $responseDate = $data[3];
+        $responseDate = DateTime::createFromFormat('d.m.Y', $data[3]);
+
+        if ($responseDate === false) {
+            throw new WaitingTimelineException('Invalid response date: ' . $data[3]);
+        }
 
         $waitingTimeMinutes = (int) $data[4];
+
+        if ($waitingTimeMinutes < 1) {
+            throw new WaitingTimelineException('Waiting time should be greater than 0');
+        }
 
         return new WaitingTimeline(
             $serviceId,

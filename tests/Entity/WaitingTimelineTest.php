@@ -5,12 +5,22 @@ namespace App\Tests\Entity;
 use PHPUnit\Framework\TestCase;
 use App\Entity\WaitingTimeline;
 use App\Enum\ResponseType;
+use DateTime;
 
 class WaitingTimelineTest extends TestCase
 {
     public function testConstructorAndGetters(): void
     {
-        $waitingTimeline = new WaitingTimeline(9, 1, '7', 14, 4, ResponseType::P, '27.11.2012', 45);
+        $waitingTimeline = new WaitingTimeline(
+            9,
+            1,
+            '7',
+            14,
+            4,
+            ResponseType::P,
+            DateTime::createFromFormat('Y-m-d', '2022-10-17'),
+            45,
+        );
 
         $this->assertInstanceOf(WaitingTimeline::class, $waitingTimeline);
 
@@ -20,7 +30,7 @@ class WaitingTimelineTest extends TestCase
         $this->assertEquals(14, $waitingTimeline->getCategoryId());
         $this->assertEquals(4, $waitingTimeline->getSubCategoryId());
         $this->assertEquals(ResponseType::P, $waitingTimeline->getResponseType());
-        $this->assertEquals('27.11.2012', $waitingTimeline->getResponseDate());
+        $this->assertEquals('17.10.2022', $waitingTimeline->getResponseDate()->format('d.m.Y'));
         $this->assertEquals(45, $waitingTimeline->getWaitingTimeMinutes());
     }
 }

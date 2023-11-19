@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Enum\ResponseType;
+use DateTimeInterface;
 
 class WaitingTimeline
 {
@@ -13,8 +14,8 @@ class WaitingTimeline
         private ?int $categoryId,
         private ?int $subCategoryId,
         private ResponseType $responseType,
-        private string $responseDate,
-        private int $waitingTimeMinutes
+        private DateTimeInterface $responseDate,
+        private int $waitingTimeMinutes,
     ) {
     }
 
@@ -48,7 +49,7 @@ class WaitingTimeline
         return $this->responseType;
     }
 
-    public function getResponseDate(): string
+    public function getResponseDate(): DateTimeInterface
     {
         return $this->responseDate;
     }

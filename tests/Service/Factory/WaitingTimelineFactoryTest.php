@@ -12,7 +12,7 @@ class WaitingTimelineFactoryTest extends TestCase
 {
     public function testCreateFromInputLine(): void
     {
-        $inputLine = '9.1 7.14.4 P 27.11.2012 45';
+        $inputLine = '9.1 7.14.4 P 27.11.2022 45';
 
         $waitingTimeline = WaitingTimelineFactory::createFromInputLine($inputLine);
 
@@ -24,7 +24,7 @@ class WaitingTimelineFactoryTest extends TestCase
         $this->assertEquals(14, $waitingTimeline->getCategoryId());
         $this->assertEquals(4, $waitingTimeline->getSubCategoryId());
         $this->assertEquals(ResponseType::P, $waitingTimeline->getResponseType());
-        $this->assertEquals('27.11.2012', $waitingTimeline->getResponseDate());
+        $this->assertEquals('2022-11-27', $waitingTimeline->getResponseDate()->format('Y-m-d'));
         $this->assertEquals(45, $waitingTimeline->getWaitingTimeMinutes());
     }
 
@@ -34,5 +34,21 @@ class WaitingTimelineFactoryTest extends TestCase
 
         $invalidInputLine = 'Invalid input line';
         WaitingTimelineFactory::createFromInputLine($invalidInputLine);
+    }
+
+    public function testInvalidResponseDate(): void
+    {
+        $this->expectException(WaitingTimelineException::class);
+
+        $invalidDateInputLine = '9.1 7.14.4 P invalid_date 45';
+        WaitingTimelineFactory::createFromInputLine($invalidDateInputLine);
+    }
+
+    public function testInvalidWaitingTime(): void
+    {
+        $this->expectException(WaitingTimelineException::class);
+
+        $invalidWaitingTimeInputLine = '9.1 7.14.4 P 27.11.2022 0';
+        WaitingTimelineFactory::createFromInputLine($invalidWaitingTimeInputLine);
     }
 }
