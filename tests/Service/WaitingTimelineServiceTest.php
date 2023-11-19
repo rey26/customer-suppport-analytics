@@ -102,4 +102,47 @@ class WaitingTimelineServiceTest extends TestCase
         $this->assertCount(1, $result);
         $this->assertInstanceOf(WaitingTimeline::class, $result[0]);
     }
+
+    public function testFindEntitiesByQueryAndCalculateAverage()
+    {
+        $waitingTimelineService = new WaitingTimelineService();
+        $waitingTimeline1 = new WaitingTimeline(1, 2, 3, 3, 4, ResponseType::P, new DateTime('2023-02-01'), 10);
+        $waitingTimeline2 = new WaitingTimeline(1, 2, 2, 7, 5, ResponseType::N, new DateTime('2023-11-01'), 20);
+        $waitingTimeline3 = new WaitingTimeline(1, 1, 1, 1, 1, ResponseType::N, new DateTime('2023-08-01'), 40);
+        $waitingTimeline4 = new WaitingTimeline(1, 1, 1, 1, 1, ResponseType::N, new DateTime('2023-09-01'), 60);
+        $waitingTimeline5 = new WaitingTimeline(1, 1, 1, 1, 1, ResponseType::N, new DateTime('2023-11-01'), 52);
+
+        $waitingTimelineService->addEntity($waitingTimeline1);
+        $waitingTimelineService->addEntity($waitingTimeline2);
+        $waitingTimelineService->addEntity($waitingTimeline3);
+        $waitingTimelineService->addEntity($waitingTimeline4);
+        $waitingTimelineService->addEntity($waitingTimeline5);
+
+        $query = new Query(1, 1, 1, 1, 1, ResponseType::N, new DateTime('2023-06-01'), new DateTime('2023-10-01'));
+
+        $result = $waitingTimelineService->setMatchingEntitiesByQuery($query)->getMatchingEntities();
+        $averageWaitingTime = $waitingTimelineService->getAverageWaitingTime();
+
+        $this->assertCount(2, $result);
+        $this->assertEquals(50, $averageWaitingTime);
+        $this->assertInstanceOf(WaitingTimeline::class, $result[0]);
+    }
+
+    public function testFindEntitiesByQueryAndCalculateAverageAsNull()
+    {
+        $waitingTimelineService = new WaitingTimelineService();
+        $waitingTimeline1 = new WaitingTimeline(1, 2, 3, 3, 4, ResponseType::P, new DateTime('2023-02-01'), 10);
+        $waitingTimeline2 = new WaitingTimeline(1, 2, 2, 7, 5, ResponseType::N, new DateTime('2023-11-01'), 20);
+
+        $waitingTimelineService->addEntity($waitingTimeline1);
+        $waitingTimelineService->addEntity($waitingTimeline2);
+
+        $query = new Query(1, 1, 1, 1, 1, ResponseType::N, new DateTime('2023-06-01'), new DateTime('2023-10-01'));
+
+        $result = $waitingTimelineService->setMatchingEntitiesByQuery($query)->getMatchingEntities();
+        $averageWaitingTime = $waitingTimelineService->getAverageWaitingTime();
+
+        $this->assertEmpty($result);
+        $this->assertNull($averageWaitingTime);
+    }
 }
